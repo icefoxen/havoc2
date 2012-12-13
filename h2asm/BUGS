@@ -1,0 +1,14 @@
+We should be able to give literals of 0xFF00 instead of, say, -0x100...
+ -- Maybe an unsigned label, so we could say 0xFF00u?  Hm.
+Hopefully we would correctly handle relative jumps to labels...  We need to be
+able to do math to literals, then we could make a relative jump to "foo" just
+be "jf (foo - $)" where $ is the current address... hmmm.
+Make sure 'get' and 'set' to system registers work properly, and using system
+registers in normal instructions and vice versa gives an error.
+Make sure all the register aliases (sp, lp, over (op?), etc) work correctly
+and are consistent between the assembler and VM.
+
+
+WONT FIX:
+The file MUST end in a newline...
+ -- Would fix it if I knew how, but I can't see a reasonable way of doing so.

@@ -1,0 +1,594 @@
+   0  $accept : %entry% $end
+
+   1  main : statement
+   2       | statement main
+
+   3  statement : decl
+   4            | const
+   5            | instr
+   6            | label
+   7            | locallabel
+   8            | segment
+   9            | NEWLINE
+
+  10  decl : DEC INT NEWLINE
+
+  11  const : CONST ID INT NEWLINE
+
+  12  label : ID COLON
+
+  13  locallabel : BANG ID COLON
+
+  14  segment : SEGMENT ID NEWLINE
+
+  15  instr : reg3instr NEWLINE
+  16        | reg2valinstr NEWLINE
+  17        | reg2instr NEWLINE
+  18        | val1instr NEWLINE
+  19        | reg1valinstr NEWLINE
+  20        | noarginstr NEWLINE
+
+  21  value : INT
+  22        | ID
+  23        | BANG ID
+
+  24  reg3instr : op REG COMMA REG COMMA REG
+  25            | op PERIOD cond REG COMMA REG COMMA REG
+
+  26  reg2valinstr : op REG COMMA REG COMMA value
+  27               | op PERIOD cond REG COMMA REG COMMA value
+
+  28  reg2instr : op REG COMMA REG
+  29            | op PERIOD cond REG COMMA REG
+
+  30  val1instr : op value
+  31            | op PERIOD cond value
+
+  32  reg1valinstr : op REG COMMA value
+  33               | op PERIOD cond REG COMMA value
+
+  34  noarginstr : op
+
+  35  op : ID
+
+  36  cond : ID
+
+  37  %entry% : '\001' main
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . main  (37)
+
+	BANG  shift 3
+	SEGMENT  shift 4
+	CONST  shift 5
+	NEWLINE  shift 6
+	ID  shift 7
+	DEC  shift 8
+	.  error
+
+	main  goto 9
+	statement  goto 10
+	decl  goto 11
+	const  goto 12
+	instr  goto 13
+	label  goto 14
+	locallabel  goto 15
+	segment  goto 16
+	reg3instr  goto 17
+	reg2valinstr  goto 18
+	reg2instr  goto 19
+	val1instr  goto 20
+	reg1valinstr  goto 21
+	noarginstr  goto 22
+	op  goto 23
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	locallabel : BANG . ID COLON  (13)
+
+	ID  shift 24
+	.  error
+
+
+state 4
+	segment : SEGMENT . ID NEWLINE  (14)
+
+	ID  shift 25
+	.  error
+
+
+state 5
+	const : CONST . ID INT NEWLINE  (11)
+
+	ID  shift 26
+	.  error
+
+
+state 6
+	statement : NEWLINE .  (9)
+
+	.  reduce 9
+
+
+state 7
+	label : ID . COLON  (12)
+	op : ID .  (35)
+
+	COLON  shift 27
+	BANG  reduce 35
+	PERIOD  reduce 35
+	REG  reduce 35
+	NEWLINE  reduce 35
+	INT  reduce 35
+	ID  reduce 35
+
+
+state 8
+	decl : DEC . INT NEWLINE  (10)
+
+	INT  shift 28
+	.  error
+
+
+state 9
+	%entry% : '\001' main .  (37)
+
+	.  reduce 37
+
+
+state 10
+	main : statement .  (1)
+	main : statement . main  (2)
+
+	BANG  shift 3
+	SEGMENT  shift 4
+	CONST  shift 5
+	NEWLINE  shift 6
+	ID  shift 7
+	DEC  shift 8
+	$end  reduce 1
+
+	main  goto 29
+	statement  goto 10
+	decl  goto 11
+	const  goto 12
+	instr  goto 13
+	label  goto 14
+	locallabel  goto 15
+	segment  goto 16
+	reg3instr  goto 17
+	reg2valinstr  goto 18
+	reg2instr  goto 19
+	val1instr  goto 20
+	reg1valinstr  goto 21
+	noarginstr  goto 22
+	op  goto 23
+
+
+state 11
+	statement : decl .  (3)
+
+	.  reduce 3
+
+
+state 12
+	statement : const .  (4)
+
+	.  reduce 4
+
+
+state 13
+	statement : instr .  (5)
+
+	.  reduce 5
+
+
+state 14
+	statement : label .  (6)
+
+	.  reduce 6
+
+
+state 15
+	statement : locallabel .  (7)
+
+	.  reduce 7
+
+
+state 16
+	statement : segment .  (8)
+
+	.  reduce 8
+
+
+state 17
+	instr : reg3instr . NEWLINE  (15)
+
+	NEWLINE  shift 30
+	.  error
+
+
+state 18
+	instr : reg2valinstr . NEWLINE  (16)
+
+	NEWLINE  shift 31
+	.  error
+
+
+state 19
+	instr : reg2instr . NEWLINE  (17)
+
+	NEWLINE  shift 32
+	.  error
+
+
+state 20
+	instr : val1instr . NEWLINE  (18)
+
+	NEWLINE  shift 33
+	.  error
+
+
+state 21
+	instr : reg1valinstr . NEWLINE  (19)
+
+	NEWLINE  shift 34
+	.  error
+
+
+state 22
+	instr : noarginstr . NEWLINE  (20)
+
+	NEWLINE  shift 35
+	.  error
+
+
+state 23
+	reg3instr : op . REG COMMA REG COMMA REG  (24)
+	reg3instr : op . PERIOD cond REG COMMA REG COMMA REG  (25)
+	reg2valinstr : op . REG COMMA REG COMMA value  (26)
+	reg2valinstr : op . PERIOD cond REG COMMA REG COMMA value  (27)
+	reg2instr : op . REG COMMA REG  (28)
+	reg2instr : op . PERIOD cond REG COMMA REG  (29)
+	val1instr : op . value  (30)
+	val1instr : op . PERIOD cond value  (31)
+	reg1valinstr : op . REG COMMA value  (32)
+	reg1valinstr : op . PERIOD cond REG COMMA value  (33)
+	noarginstr : op .  (34)
+
+	BANG  shift 36
+	PERIOD  shift 37
+	REG  shift 38
+	INT  shift 39
+	ID  shift 40
+	NEWLINE  reduce 34
+
+	value  goto 41
+
+
+state 24
+	locallabel : BANG ID . COLON  (13)
+
+	COLON  shift 42
+	.  error
+
+
+state 25
+	segment : SEGMENT ID . NEWLINE  (14)
+
+	NEWLINE  shift 43
+	.  error
+
+
+state 26
+	const : CONST ID . INT NEWLINE  (11)
+
+	INT  shift 44
+	.  error
+
+
+state 27
+	label : ID COLON .  (12)
+
+	.  reduce 12
+
+
+state 28
+	decl : DEC INT . NEWLINE  (10)
+
+	NEWLINE  shift 45
+	.  error
+
+
+state 29
+	main : statement main .  (2)
+
+	.  reduce 2
+
+
+state 30
+	instr : reg3instr NEWLINE .  (15)
+
+	.  reduce 15
+
+
+state 31
+	instr : reg2valinstr NEWLINE .  (16)
+
+	.  reduce 16
+
+
+state 32
+	instr : reg2instr NEWLINE .  (17)
+
+	.  reduce 17
+
+
+state 33
+	instr : val1instr NEWLINE .  (18)
+
+	.  reduce 18
+
+
+state 34
+	instr : reg1valinstr NEWLINE .  (19)
+
+	.  reduce 19
+
+
+state 35
+	instr : noarginstr NEWLINE .  (20)
+
+	.  reduce 20
+
+
+state 36
+	value : BANG . ID  (23)
+
+	ID  shift 46
+	.  error
+
+
+state 37
+	reg3instr : op PERIOD . cond REG COMMA REG COMMA REG  (25)
+	reg2valinstr : op PERIOD . cond REG COMMA REG COMMA value  (27)
+	reg2instr : op PERIOD . cond REG COMMA REG  (29)
+	val1instr : op PERIOD . cond value  (31)
+	reg1valinstr : op PERIOD . cond REG COMMA value  (33)
+
+	ID  shift 47
+	.  error
+
+	cond  goto 48
+
+
+state 38
+	reg3instr : op REG . COMMA REG COMMA REG  (24)
+	reg2valinstr : op REG . COMMA REG COMMA value  (26)
+	reg2instr : op REG . COMMA REG  (28)
+	reg1valinstr : op REG . COMMA value  (32)
+
+	COMMA  shift 49
+	.  error
+
+
+state 39
+	value : INT .  (21)
+
+	.  reduce 21
+
+
+state 40
+	value : ID .  (22)
+
+	.  reduce 22
+
+
+state 41
+	val1instr : op value .  (30)
+
+	.  reduce 30
+
+
+state 42
+	locallabel : BANG ID COLON .  (13)
+
+	.  reduce 13
+
+
+state 43
+	segment : SEGMENT ID NEWLINE .  (14)
+
+	.  reduce 14
+
+
+state 44
+	const : CONST ID INT . NEWLINE  (11)
+
+	NEWLINE  shift 50
+	.  error
+
+
+state 45
+	decl : DEC INT NEWLINE .  (10)
+
+	.  reduce 10
+
+
+state 46
+	value : BANG ID .  (23)
+
+	.  reduce 23
+
+
+state 47
+	cond : ID .  (36)
+
+	.  reduce 36
+
+
+state 48
+	reg3instr : op PERIOD cond . REG COMMA REG COMMA REG  (25)
+	reg2valinstr : op PERIOD cond . REG COMMA REG COMMA value  (27)
+	reg2instr : op PERIOD cond . REG COMMA REG  (29)
+	val1instr : op PERIOD cond . value  (31)
+	reg1valinstr : op PERIOD cond . REG COMMA value  (33)
+
+	BANG  shift 36
+	REG  shift 51
+	INT  shift 39
+	ID  shift 40
+	.  error
+
+	value  goto 52
+
+
+state 49
+	reg3instr : op REG COMMA . REG COMMA REG  (24)
+	reg2valinstr : op REG COMMA . REG COMMA value  (26)
+	reg2instr : op REG COMMA . REG  (28)
+	reg1valinstr : op REG COMMA . value  (32)
+
+	BANG  shift 36
+	REG  shift 53
+	INT  shift 39
+	ID  shift 40
+	.  error
+
+	value  goto 54
+
+
+state 50
+	const : CONST ID INT NEWLINE .  (11)
+
+	.  reduce 11
+
+
+state 51
+	reg3instr : op PERIOD cond REG . COMMA REG COMMA REG  (25)
+	reg2valinstr : op PERIOD cond REG . COMMA REG COMMA value  (27)
+	reg2instr : op PERIOD cond REG . COMMA REG  (29)
+	reg1valinstr : op PERIOD cond REG . COMMA value  (33)
+
+	COMMA  shift 55
+	.  error
+
+
+state 52
+	val1instr : op PERIOD cond value .  (31)
+
+	.  reduce 31
+
+
+state 53
+	reg3instr : op REG COMMA REG . COMMA REG  (24)
+	reg2valinstr : op REG COMMA REG . COMMA value  (26)
+	reg2instr : op REG COMMA REG .  (28)
+
+	COMMA  shift 56
+	NEWLINE  reduce 28
+
+
+state 54
+	reg1valinstr : op REG COMMA value .  (32)
+
+	.  reduce 32
+
+
+state 55
+	reg3instr : op PERIOD cond REG COMMA . REG COMMA REG  (25)
+	reg2valinstr : op PERIOD cond REG COMMA . REG COMMA value  (27)
+	reg2instr : op PERIOD cond REG COMMA . REG  (29)
+	reg1valinstr : op PERIOD cond REG COMMA . value  (33)
+
+	BANG  shift 36
+	REG  shift 57
+	INT  shift 39
+	ID  shift 40
+	.  error
+
+	value  goto 58
+
+
+state 56
+	reg3instr : op REG COMMA REG COMMA . REG  (24)
+	reg2valinstr : op REG COMMA REG COMMA . value  (26)
+
+	BANG  shift 36
+	REG  shift 59
+	INT  shift 39
+	ID  shift 40
+	.  error
+
+	value  goto 60
+
+
+state 57
+	reg3instr : op PERIOD cond REG COMMA REG . COMMA REG  (25)
+	reg2valinstr : op PERIOD cond REG COMMA REG . COMMA value  (27)
+	reg2instr : op PERIOD cond REG COMMA REG .  (29)
+
+	COMMA  shift 61
+	NEWLINE  reduce 29
+
+
+state 58
+	reg1valinstr : op PERIOD cond REG COMMA value .  (33)
+
+	.  reduce 33
+
+
+state 59
+	reg3instr : op REG COMMA REG COMMA REG .  (24)
+
+	.  reduce 24
+
+
+state 60
+	reg2valinstr : op REG COMMA REG COMMA value .  (26)
+
+	.  reduce 26
+
+
+state 61
+	reg3instr : op PERIOD cond REG COMMA REG COMMA . REG  (25)
+	reg2valinstr : op PERIOD cond REG COMMA REG COMMA . value  (27)
+
+	BANG  shift 36
+	REG  shift 62
+	INT  shift 39
+	ID  shift 40
+	.  error
+
+	value  goto 63
+
+
+state 62
+	reg3instr : op PERIOD cond REG COMMA REG COMMA REG .  (25)
+
+	.  reduce 25
+
+
+state 63
+	reg2valinstr : op PERIOD cond REG COMMA REG COMMA value .  (27)
+
+	.  reduce 27
+
+
+17 terminals, 19 nonterminals
+38 grammar rules, 64 states

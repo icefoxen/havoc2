@@ -1,0 +1,34 @@
+; Declares a constant value without allocating space.
+const FOO 0x91
+
+; Declaring strings, characters?  Right now those things don't exist.
+; Characters at least are rather important.
+; We would also sort of like a 'resb' instruction that reserves a given
+; amount of space, possibly initializing it to a value.
+; But that would require some syntax to initialize values.
+
+segment text
+main:
+   li r10, 0x00
+   li r11, 1
+   sl r11, r11, 0x18
+!loopity:
+   add r10, r10, 1
+   cmp r10, r11
+   bf.ne -2
+   m r1, r0
+   neg r1, r1
+   li r2, 1
+   li r3, FOO
+   li r4, -3
+   xor r2, r2, r2
+   ; Soooo...  This is sort of awkward, because we want the value 0xFF00...
+   liu r2, -0x100
+   so r2, r2, 1
+
+
+
+db 4
+dw 3
+dt 2
+do 1

@@ -1,0 +1,20 @@
+Things to fix:
+Command line args
+Anything with XXX near it
+Some instructions are still incomplete/unimplemented
+Most instructions are untested
+System calls are a bit janky
+LOAD and STORE system calls seem to load/store in native byte order, which is not
+necessarily what one would expect; files should be bags of bytes
+System calls directly access memory with no checks which can be bad
+System call and other user documentation could be better
+Errors are a bit vague and don't drop you into the interpreter
+Cleanup doesn't happen correctly in the various cases where exit() is called
+Debugger is a tad wussy
+Need an assembler!
+Need a 'get # of instructions executed' syscall instead of printing it out at the
+end.
+Debugger commands to directly invoke syscalls?
+Normal or wide strings?
+A few things in cpu.h or such might be better off in misc.h
+

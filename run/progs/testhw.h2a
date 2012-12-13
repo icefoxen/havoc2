@@ -1,0 +1,45 @@
+segment text
+; Remember: r1-r8 are arguments/returns, r9-r16 are caller-save locals,
+; r17-r24 are callee-save locals, and r25-r31 are scratch.
+; So right now I just use r17-r24 for the main function, and all the other
+; leaf functions use r25-r31.
+main:
+	; Delay
+;	li r21, delayloop
+;	bl r21, 0
+	; Test timers
+	li r22, testtimer
+;	bl r22, 0
+	; Test misc devices
+	li r22, testmisc
+;	bl r22, 0	
+
+;delayloop:
+;	li r25, 1
+;	sl r25, r25, 0x1
+;	sub r25, r25, 1
+;	cmp r25, r0
+;	bf.ne -2
+;	b r31, 0
+
+testtimer:
+	li r25, 0
+	liu r25, -0x100
+	li r26, 0x2000
+	add r25, r25, r26
+	li r26, 100
+	so r25, r26, 0
+
+;	li r31, delayloop
+;	bl r31, 0
+
+
+testmisc:
+	li r25, 0
+	liu r25, -0x100
+	; Get memory size
+	lo r26, r25, 0
+	; Break into debugger
+	so r25, r25, 1
+	; Shut down.
+	so r25, r25, 2
